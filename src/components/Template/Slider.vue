@@ -30,7 +30,7 @@ const data = reactive([
 
 <template>
   <section class="slider">
-    <div class="w-4/5 m-auto mt-10 rounded-2xl">
+    <div class="w-full px-5 m-auto mt-10 rounded-2xl">
       <swiper
           :space-between="50"
           :slides-per-view="1"
@@ -53,7 +53,7 @@ const data = reactive([
 
 .slide_content {
   min-width: 100%;
-  min-height: 350px;
+  min-height: 450px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

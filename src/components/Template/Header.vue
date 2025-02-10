@@ -35,6 +35,7 @@
       </ul>
     </nav>
   </header>
+  <hr class="text-gray-300 mt-3">
 </template>
 
 <style scoped>

@@ -45,6 +45,20 @@ const data = reactive([
     inCart: false,
     liked: false
   },
+  {
+    title: 'Puma 2',
+    price: 8900.00,
+    image: '/public/sneakers/sneakers-8.jpg',
+    inCart: false,
+    liked: false
+  },
+  {
+    title: 'Puma 2',
+    price: 8900.00,
+    image: '/public/sneakers/sneakers-9.jpg',
+    inCart: false,
+    liked: false
+  },
 ])
 
 const catalogTitle = ref('Все сникеры')

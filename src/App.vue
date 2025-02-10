@@ -9,7 +9,6 @@ import Catalog from "@/components/Catalog/Catalog.vue";
 <template>
   <div class="w-4/5 m-auto min-h-screen bg-white rounded-2xl shadow-2xl mt-5">
     <Header/>
-    <hr class="text-gray-300 mt-3">
     <Slider/>
     <Search/>
     <Catalog/>
