@@ -1,9 +1,22 @@
 <script setup>
+import {onMounted, ref} from "vue";
+import axios from "axios";
+
 import Header from "@/components/Template/Header.vue";
 import Slider from "@/components/Template/Slider.vue";
 import Search from "@/components/Template/Search.vue";
 import Catalog from "@/components/Catalog/Catalog.vue";
 
+const backendUrl = 'https://c68fa968b688ddc2.mokky.dev'
+let items = ref([]);
+
+onMounted(async () => {
+  try {
+    items.value = await axios.get(`${backendUrl}/products`).then(res => res.data)
+  } catch (error) {
+    console.error('Backend error =( Check request')
+  }
+})
 </script>
 
 <template>
@@ -11,7 +24,8 @@ import Catalog from "@/components/Catalog/Catalog.vue";
     <Header/>
     <Slider/>
     <Search/>
-    <Catalog/>
+    <Catalog :items="items"/>
+    <!--    <Cart/>-->
   </div>
 </template>
 

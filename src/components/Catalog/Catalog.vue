@@ -2,77 +2,22 @@
 import Product from "@/components/Catalog/Product.vue";
 import {reactive, ref} from "vue";
 
-const data = reactive([
-  {
-    title: 'Nike Blazer',
-    id: 1,
-    price: 11799.00,
-    image: '/public/sneakers/sneakers-1.jpg',
-    inCart: true,
-    liked: true
-  },
-  {
-    title: 'Nike Runner',
-    id: 2,
-    price: 9999.00,
-    image: '/public/sneakers/sneakers-2.jpg',
-    inCart: true,
-    liked: false
-  },
-  {
-    title: 'Nike Blazer white 1985 limited edition',
-    id: 3,
-    price: 7990.00,
-    image: '/public/sneakers/sneakers-3.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma',
-    id: 4,
-    price: 24500.00,
-    image: '/public/sneakers/sneakers-4.jpg',
-    inCart: false,
-    liked: true
-  },
-  {
-    title: 'Reebok black',
-    id: 5,
-    price: 13990.00,
-    image: '/public/sneakers/sneakers-11.jpg',
-    inCart: false,
-    liked: true
-  },
-  {
-    title: 'Puma 2',
-    id: 6,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-12.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 7,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-8.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 8,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-9.jpg',
-    inCart: false,
-    liked: false
-  },
-])
+const props = defineProps({
+  items: Array
+})
 
 const catalogTitle = ref('Все сникеры')
 
 const hasProducts = () => {
-  return data.length > 0
+  return props.items.length > 0
+}
+
+const addToCart = () => {
+  alert('In CART!')
+}
+
+const addToFavorite = () => {
+  alert('IN FAVORITE!')
 }
 
 </script>
@@ -83,8 +28,16 @@ const hasProducts = () => {
       <h1 class="font-bold text-2xl">{{ catalogTitle }}</h1>
     </div>
 
-    <div class="products_list flex flex-wrap items-center justify-center gap-5 max-w-4/5 m-auto" v-if="hasProducts">
-      <Product v-for="item in data" :product="item"/>
+    <div class="products_list flex flex-wrap items-center justify-center gap-5 max-w-4/5 m-auto" v-if="hasProducts()">
+      <Product v-for="item in items"
+               :title="item.title"
+               :price="item.price"
+               :image="item.image"
+               :liked="item.liked"
+               :inCart="item.inCart"
+               :addToCart="addToCart"
+               :addToFavorite="addToFavorite"
+      />
     </div>
     <div v-else class="text-center ">
       <h2>Кроссовки пока не завезли, приходите позже =)</h2>
