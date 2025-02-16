@@ -1,8 +1,14 @@
 <script setup>
+import {computed, ref} from "vue";
 
 defineProps({
   product: Object
 })
+
+const addToCart = (product) => {
+  product.inCart = true
+}
+
 </script>
 
 <template>
@@ -18,7 +24,8 @@ defineProps({
         <span>{{ product.price }} ₽</span>
       </div>
       <div>
-        <img :src="!product.inCart ? '/public/plus.svg' : '/public/checked.svg'" alt="cart">
+        <img @click.prevent="addToCart(product)"
+             :src="!product.inCart ? '/public/plus.svg' : '/public/checked.svg'" alt="cart">
       </div>
     </div>
   </div>

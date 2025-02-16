@@ -5,6 +5,7 @@ import {reactive, ref} from "vue";
 const data = reactive([
   {
     title: 'Nike Blazer',
+    id: 1,
     price: 11799.00,
     image: '/public/sneakers/sneakers-1.jpg',
     inCart: true,
@@ -12,6 +13,7 @@ const data = reactive([
   },
   {
     title: 'Nike Runner',
+    id: 2,
     price: 9999.00,
     image: '/public/sneakers/sneakers-2.jpg',
     inCart: true,
@@ -19,6 +21,7 @@ const data = reactive([
   },
   {
     title: 'Nike Blazer white 1985 limited edition',
+    id: 3,
     price: 7990.00,
     image: '/public/sneakers/sneakers-3.jpg',
     inCart: false,
@@ -26,6 +29,7 @@ const data = reactive([
   },
   {
     title: 'Puma',
+    id: 4,
     price: 24500.00,
     image: '/public/sneakers/sneakers-4.jpg',
     inCart: false,
@@ -33,6 +37,7 @@ const data = reactive([
   },
   {
     title: 'Reebok black',
+    id: 5,
     price: 13990.00,
     image: '/public/sneakers/sneakers-11.jpg',
     inCart: false,
@@ -40,6 +45,7 @@ const data = reactive([
   },
   {
     title: 'Puma 2',
+    id: 6,
     price: 8900.00,
     image: '/public/sneakers/sneakers-12.jpg',
     inCart: false,
@@ -47,6 +53,7 @@ const data = reactive([
   },
   {
     title: 'Puma 2',
+    id: 7,
     price: 8900.00,
     image: '/public/sneakers/sneakers-8.jpg',
     inCart: false,
@@ -54,6 +61,7 @@ const data = reactive([
   },
   {
     title: 'Puma 2',
+    id: 8,
     price: 8900.00,
     image: '/public/sneakers/sneakers-9.jpg',
     inCart: false,
