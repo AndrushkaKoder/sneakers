@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "axios";
 
 import Header from "@/components/Template/Header.vue";
@@ -11,22 +11,25 @@ import Footer from "@/components/Template/Footer.vue";
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 let items = ref([]);
-let searchedItems = ref([]);
 
-onMounted(async () => {
+onMounted(() => {
+  getProducts()
+})
+
+const getProducts = async () => {
   try {
     items.value = await axios.get(`${backendUrl}/products`).then(res => res.data)
   } catch (error) {
-    console.error('Backend error =(')
+    console.error('some error')
   }
-})
+}
 
-watch(searchedItems, () => {
-
-})
-
-const onSearched = (items) => {
-  console.log(items)
+const handleSearch = (searchResult) => {
+  if (searchResult && searchResult.length > 0) {
+    items.value = searchResult
+  } else {
+    getProducts()
+  }
 }
 
 </script>
@@ -35,7 +38,7 @@ const onSearched = (items) => {
   <div class="w-4/5 m-auto min-h-screen bg-white rounded-2xl shadow-2xl mt-5 content_wrapper">
     <Header/>
     <Slider/>
-    <Search/>
+    <Search @searched="handleSearch"/>
     <Catalog :items="items"/>
     <!--    <Cart/>-->
     <Footer/>
