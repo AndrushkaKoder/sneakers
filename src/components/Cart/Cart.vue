@@ -1,131 +1,30 @@
 <script setup>
-import CartHeader from "@/components/Cart/CartHeader.vue";
 import {reactive, ref} from "vue";
+import CartHeader from "@/components/Cart/CartHeader.vue";
 import CartItem from "@/components/Cart/CartItem.vue";
 
+defineProps({
+  items: Object
+})
 const discount = ref(null)
-
-const data = reactive([
-  {
-    title: 'Puma limited edition 500 unique style',
-    id: 4,
-    price: 24500.00,
-    image: '/public/sneakers/sneakers-4.jpg',
-    inCart: false,
-    liked: true
-  },
-  {
-    title: 'Reebok black',
-    id: 5,
-    price: 13990.00,
-    image: '/public/sneakers/sneakers-11.jpg',
-    inCart: false,
-    liked: true
-  },
-  {
-    title: 'Puma 2',
-    id: 6,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-12.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 7,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-8.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma',
-    id: 4,
-    price: 24500.00,
-    image: '/public/sneakers/sneakers-4.jpg',
-    inCart: false,
-    liked: true
-  },
-  {
-    title: 'Reebok black',
-    id: 5,
-    price: 13990.00,
-    image: '/public/sneakers/sneakers-11.jpg',
-    inCart: false,
-    liked: true
-  },
-  {
-    title: 'Puma 2',
-    id: 6,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-12.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 7,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-8.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 7,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-8.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 7,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-8.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 7,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-8.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 7,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-8.jpg',
-    inCart: false,
-    liked: false
-  },
-  {
-    title: 'Puma 2',
-    id: 7,
-    price: 8900.00,
-    image: '/public/sneakers/sneakers-8.jpg',
-    inCart: false,
-    liked: false
-  },
-])
 
 </script>
 
 <template>
-  <div class="cart bg-white">
+  <div class="cart bg-white hidden">
     <div class="cart_content">
       <CartHeader/>
 
       <div class="cart_total flex flex-col p-5 gap-5">
         <div class="promo">
-          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Есть промокод? Впиши и получи скидку</label>
-          <input v-if="!discount" name="discount_promo" class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Есть промокод?
+            Впиши и получи скидку</label>
+          <input v-if="!discount" name="discount_promo"
+                 class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                  placeholder="Место для Вашего промокода"
           >
-          <input v-else disabled class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+          <input v-else disabled
+                 class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                  placeholder="Промокод применен"
           >
         </div>
@@ -136,7 +35,8 @@ const data = reactive([
           <span :class="!discount ? 'font-bold text-xl' : 'line-through text-xl'">100500</span>
           <span>₽</span>
         </div>
-        <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+        <button type="button"
+                class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
           Оформить заказ
         </button>
       </div>

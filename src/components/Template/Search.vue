@@ -18,10 +18,13 @@ const onSearch = async (event) => {
   try {
     if ((event.target.value !== null) && (event.target.value.length >= 4)) {
       emit('searched', await axios.get(`${backendUrl}/products?title=*${event.target.value}*`).then(res => res.data))
+      event.target.classList.add('success')
     } else {
+      event.target.classList.remove('success')
       emit('searched', null)
     }
   } catch (error) {
+    event.target.classList.remove('error')
     console.error('Some server errors =( ' + error)
   }
 }
@@ -48,7 +51,7 @@ const onSearch = async (event) => {
             <select @change="onSearch"
                     class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer"
             >
-              <option value="null" selected>Не выбрано</option>
+              <option value="null" selected>Все</option>
               <option v-for="item in selectData" :value="item.title">{{ item.title }}</option>
             </select>
 
@@ -65,6 +68,12 @@ const onSearch = async (event) => {
 </template>
 
 <style scoped>
+.success {
+  border: 2px solid lightgreen;
+}
+.error {
+  border: 2px solid lightcoral;
+}
 @media screen and (max-width: 768px) {
   .search_wrapper {
     flex-direction: column;
