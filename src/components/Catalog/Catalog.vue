@@ -1,9 +1,13 @@
 <script setup>
+import {ref, inject} from "vue";
+import axios from "axios";
 import Product from "@/components/Catalog/Product.vue";
-import {reactive, ref} from "vue";
 
+
+const emit = defineEmits(['searched', 'cart']);
+const backendUrl = inject('backendUrl');
 const props = defineProps({
-  items: Array
+  items: Array,
 })
 
 const catalogTitle = ref('Все сникеры')
@@ -12,8 +16,21 @@ const hasProducts = () => {
   return props.items.length > 0
 }
 
-const addToCart = () => {
-  alert('In CART!')
+const addToCart = (productId) => {
+  if (productId) {
+    axios.post(`${backendUrl}/cart`, {
+      id: productId
+    }).then(response => {
+      if (response.status === 200 || response.status === 201) {
+        emit('cart', productId)
+        props.items.find(item => {
+          if (item.id === productId) {
+            item.inCart = true
+          }
+        })
+      }
+    })
+  }
 }
 
 const addToFavorite = () => {
@@ -30,6 +47,7 @@ const addToFavorite = () => {
 
     <div class="products_list flex flex-wrap items-center justify-center gap-5 max-w-4/5 m-auto" v-if="hasProducts()">
       <Product v-for="item in items"
+               :id="item.id"
                :title="item.title"
                :price="item.price"
                :image="item.image"

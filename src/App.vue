@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, provide, reactive} from "vue";
 import axios from "axios";
 
 import Header from "@/components/Template/Header.vue";
@@ -9,14 +9,22 @@ import Catalog from "@/components/Catalog/Catalog.vue";
 import Footer from "@/components/Template/Footer.vue";
 import Cart from "@/components/Cart/Cart.vue";
 import Favorite from "@/components/Favorite/Favorite.vue";
+import Alert from "@/components/Alert/Alert.vue";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+provide('backendUrl', backendUrl)
+
 const items = ref([]);
 const favoritesItems = ref([])
 const favoriteIds = ref([])
 const cartItems = ref([])
 const cartIds = ref([])
 const cartTotal = ref(0)
+const alert = reactive({
+  success: false,
+  message: null
+})
 
 onMounted(() => {
   getProducts()
@@ -71,6 +79,14 @@ const handleSearch = (searchResult) => {
   }
 }
 
+const handleAddToCart = (productInCart) => {
+  cartItems.value.push(productInCart)
+   let price = items.value.find(item => productInCart === item.id).price
+  if (price) {
+    cartTotal.value += price
+  }
+}
+
 </script>
 
 <template>
@@ -78,10 +94,11 @@ const handleSearch = (searchResult) => {
     <Header :cartTotal="cartTotal"/>
     <Slider/>
     <Search @searched="handleSearch"/>
-    <Catalog :items="items"/>
+    <Catalog :items="items" @cart="handleAddToCart"/>
     <Cart :items="cartItems"/>
     <Favorite :items="favoritesItems"/>
     <Footer/>
+    <Alert :message="alert.message" :success="alert.success"/>
   </div>
 </template>
 
