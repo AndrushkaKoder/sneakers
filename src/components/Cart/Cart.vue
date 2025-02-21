@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from "vue";
+import {onMounted, ref} from "vue";
 import CartHeader from "@/components/Cart/CartHeader.vue";
 import CartItem from "@/components/Cart/CartItem.vue";
 
@@ -42,7 +42,7 @@ const discount = ref(null)
       </div>
 
       <div class="cart_items px-5">
-        <CartItem v-for="item in data"
+        <CartItem v-for="item in items"
                   :title="item.title"
                   :image="item.image"
                   :price="item.price"
@@ -53,14 +53,6 @@ const discount = ref(null)
 </template>
 
 <style scoped>
-.cart_on {
-
-}
-
-.cart_off {
-
-}
-
 body {
   overflow: hidden;
   height: 50vh;

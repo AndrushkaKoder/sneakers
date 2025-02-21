@@ -1,5 +1,9 @@
 <script setup>
 
+defineProps({
+  cartTotal: Number | String
+})
+
 const showCart = () => {
   const cart = document.querySelector('.cart')
   cart.classList.toggle('hidden')
@@ -25,9 +29,9 @@ const showFavorite = () => {
     <nav class="navigation">
       <ul class="flex justify-center items-center gap-3 nav_list">
         <li class="nav_item">
-          <a href="#" class="flex justify-center items-center gap-2 cart_open" @click="showCart">
+          <a v-if="cartTotal" href="#" class="flex justify-center items-center gap-2 cart_open" @click="showCart">
             <img src="/cart.svg" alt="cart">
-            <span>1250p</span>
+            <span>{{ cartTotal }} P</span>
           </a>
         </li>
         <li class="nav_item">

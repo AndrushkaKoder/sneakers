@@ -16,6 +16,7 @@ const favoritesItems = ref([])
 const favoriteIds = ref([])
 const cartItems = ref([])
 const cartIds = ref([])
+const cartTotal = ref(0)
 
 onMounted(() => {
   getProducts()
@@ -42,9 +43,23 @@ const getFavorites = async () => {
         }
       })
     }
-    console.log(favoritesItems.value)
   } catch (error) {
     console.error('some error ' + error)
+  }
+}
+
+const getCart = async () => {
+  try {
+      cartIds.value = await axios.get(`${backendUrl}/cart`).then(res => res.data)
+      items.value.map(product => {
+        if (cartIds.value.find(cartProduct => product.id === cartProduct.id)) {
+          product.inCart = true
+          cartItems.value.push(product)
+          cartTotal.value += product.price
+        }
+      })
+  } catch (error) {
+    console.error('error in cart =(')
   }
 }
 
@@ -56,15 +71,11 @@ const handleSearch = (searchResult) => {
   }
 }
 
-const getCart = () => {
-  console.log('cart')
-}
-
 </script>
 
 <template>
   <div class="w-4/5 m-auto min-h-screen bg-white rounded-2xl shadow-2xl mt-5 content_wrapper">
-    <Header/>
+    <Header :cartTotal="cartTotal"/>
     <Slider/>
     <Search @searched="handleSearch"/>
     <Catalog :items="items"/>
