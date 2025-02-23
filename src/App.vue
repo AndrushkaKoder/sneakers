@@ -10,6 +10,7 @@ import Footer from "@/components/Template/Footer.vue";
 import Cart from "@/components/Cart/Cart.vue";
 import Favorite from "@/components/Favorite/Favorite.vue";
 import Alert from "@/components/Alert/Alert.vue";
+import OrderModal from "@/components/Order/OrderModal.vue";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -25,11 +26,9 @@ const alert = reactive({
   message: null
 })
 
-onMounted(() => {
-  setTimeout(() => {
-    getCart()
-  }, 1)
-  getProducts()
+onMounted(async () => {
+  await getProducts()
+  await getCart()
 })
 
 const getProducts = async () => {
@@ -120,7 +119,6 @@ const handleDeleteFromCart = (product) => {
         :message="alert.message"
         :success="alert.success"
     />
-
   </div>
 </template>
 
