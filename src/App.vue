@@ -15,11 +15,10 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 provide('backendUrl', backendUrl)
 
-const items = ref([]);
+const productItems = ref([]);
 const favoritesItems = ref([])
 const favoriteIds = ref([])
 const cartItems = ref([])
-const cartIds = ref([])
 const cartTotal = ref(0)
 const alert = reactive({
   success: false,
@@ -27,24 +26,42 @@ const alert = reactive({
 })
 
 onMounted(() => {
+  setTimeout(() => {
+    getCart()
+  }, 1)
   getProducts()
-  getFavorites()
-  getCart()
 })
 
 const getProducts = async () => {
   try {
-    items.value = await axios.get(`${backendUrl}/products`).then(res => res.data)
+    productItems.value = await axios.get(`${backendUrl}/products`).then(res => res.data)
   } catch (error) {
     console.error('some error ' + error)
   }
 }
 
+const getCart = async () => {
+  try {
+    cartItems.value = await axios.get(`${backendUrl}/cart`).then(response => response.data)
+    cartItems.value.forEach(el => {
+      cartTotal.value += el.price ?? 0
+      productItems.value.find(item => {
+        if (item.product_id === el.product_id) {
+          item.inCart = true
+        }
+      })
+    })
+
+  } catch (error) {
+    console.error('Some error - ' + error)
+  }
+}
+
 const getFavorites = async () => {
   try {
-    if (items) {
+    if (productItems) {
       favoriteIds.value = await axios.get(`${backendUrl}/favorites`).then(res => res.data)
-      items.value.map(product => {
+      productItems.value.map(product => {
         if (favoriteIds.value.find(favoriteProduct => product.id === favoriteProduct.id)) {
           product.liked = true
           favoritesItems.value.push(product)
@@ -56,49 +73,54 @@ const getFavorites = async () => {
   }
 }
 
-const getCart = async () => {
-  try {
-      cartIds.value = await axios.get(`${backendUrl}/cart`).then(res => res.data)
-      items.value.map(product => {
-        if (cartIds.value.find(cartProduct => product.id === cartProduct.id)) {
-          product.inCart = true
-          cartItems.value.push(product)
-          cartTotal.value += product.price
-        }
-      })
-  } catch (error) {
-    console.error('error in cart =(')
-  }
-}
-
 const handleSearch = (searchResult) => {
   if (searchResult && searchResult.length > 0) {
-    items.value = searchResult
+    productItems.value = searchResult
   } else {
     getProducts()
   }
 }
 
-const handleAddToCart = (productInCart) => {
-  cartItems.value.push(productInCart)
-   let price = items.value.find(item => productInCart === item.id).price
-  if (price) {
-    cartTotal.value += price
-  }
+const handleAddToCart = (product) => {
+  cartItems.value.push(product)
+  cartTotal.value += product.price
+}
+
+const handleDeleteFromCart = (product) => {
+  cartTotal.value -= product.price
 }
 
 </script>
 
 <template>
   <div class="w-4/5 m-auto min-h-screen bg-white rounded-2xl shadow-2xl mt-5 content_wrapper">
+
     <Header :cartTotal="cartTotal"/>
+
     <Slider/>
+
     <Search @searched="handleSearch"/>
-    <Catalog :items="items" @cart="handleAddToCart"/>
-    <Cart :items="cartItems"/>
+
+    <Catalog
+        :items="productItems"
+        @cart="handleAddToCart"
+    />
+
+    <Cart
+        :items="cartItems"
+        :sum="cartTotal"
+        @delItem="handleDeleteFromCart"
+    />
+
     <Favorite :items="favoritesItems"/>
+
     <Footer/>
-    <Alert :message="alert.message" :success="alert.success"/>
+
+    <Alert
+        :message="alert.message"
+        :success="alert.success"
+    />
+
   </div>
 </template>
 

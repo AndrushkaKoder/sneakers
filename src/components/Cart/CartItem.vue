@@ -1,9 +1,12 @@
 <script setup>
-defineProps({
+const props = defineProps({
+  id: Number | String,
+  product_id: Number | String,
   title: String,
   image: String,
   price: String | Number,
-  inCart: Boolean
+  inCart: Boolean,
+  deleteFromCart: Function
 })
 </script>
 
@@ -15,7 +18,7 @@ defineProps({
       <span class="text-gray-500 text-xs">{{ price }}</span>
     </div>
     <div>
-      <img src="/public/close.svg" alt="close button">
+      <img @click.prevent="deleteFromCart(props)" src="/public/close.svg" alt="close button">
     </div>
   </div>
 </template>

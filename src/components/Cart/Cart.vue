@@ -1,17 +1,36 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {inject, ref, watchEffect} from "vue";
 import CartHeader from "@/components/Cart/CartHeader.vue";
 import CartItem from "@/components/Cart/CartItem.vue";
+import axios from "axios";
 
-defineProps({
-  items: Object
+const props = defineProps({
+  items: Object,
+  sum: Number | String
 })
-const discount = ref(null)
 
+const backendUrl = inject('backendUrl');
+const discount = ref(null)
+const emit = defineEmits(['delItem'])
+const showCart = ref(false)
+
+const deleteItem = (product) => {
+  axios.delete(`${backendUrl}/cart/${product.id}`)
+  for (let i in props.items) {
+    if (props.items[i].product_id === product.product_id) {
+      props.items.splice(i, 1)
+    }
+  }
+  emit('delItem', product)
+}
+
+watchEffect(() => {
+  showCart.value = Number(props.sum) > 0
+})
 </script>
 
 <template>
-  <div class="cart bg-white hidden">
+  <div v-if="showCart" class="cart bg-white hidden">
     <div class="cart_content">
       <CartHeader/>
 
@@ -31,8 +50,8 @@ const discount = ref(null)
         <div class="flex justify-between my-5 gap-2">
           <span class="font-bold">Итого: </span>
           <div class="flex-1 border-b border-b-gray-300 border-dashed"></div>
-          <span v-if="discount" class="font-bold text-xl text-red-400">100500</span>
-          <span :class="!discount ? 'font-bold text-xl' : 'line-through text-xl'">100500</span>
+          <span v-if="discount" class="font-bold text-xl text-red-400">{{ sum }}</span>
+          <span :class="!discount ? 'font-bold text-xl' : 'line-through text-xl'">{{ sum }}</span>
           <span>₽</span>
         </div>
         <button type="button"
@@ -43,9 +62,12 @@ const discount = ref(null)
 
       <div class="cart_items px-5">
         <CartItem v-for="item in items"
+                  :id="item.id"
+                  :product_id="item.product_id"
                   :title="item.title"
                   :image="item.image"
                   :price="item.price"
+                  :deleteFromCart="deleteItem"
         />
       </div>
     </div>

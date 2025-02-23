@@ -1,6 +1,6 @@
 <script setup>
-defineProps({
-  id: Number,
+const props = defineProps({
+  product_id: Number | String,
   title: String,
   price: String | Number,
   image: String,
@@ -24,7 +24,7 @@ defineProps({
         <span>{{ price }} ₽</span>
       </div>
       <div>
-        <img @click="addToCart(id)"
+        <img @click="addToCart(props)"
              :src="!inCart ? '/public/plus.svg' : '/public/checked.svg'" alt="cart">
       </div>
     </div>

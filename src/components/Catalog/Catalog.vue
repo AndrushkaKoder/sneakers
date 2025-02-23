@@ -3,40 +3,27 @@ import {ref, inject} from "vue";
 import axios from "axios";
 import Product from "@/components/Catalog/Product.vue";
 
-
-const emit = defineEmits(['searched', 'cart']);
+const catalogTitle = ref('Все сникеры')
+const emit = defineEmits(['cart'])
 const backendUrl = inject('backendUrl');
 const props = defineProps({
   items: Array,
 })
 
-const catalogTitle = ref('Все сникеры')
-
 const hasProducts = () => {
   return props.items.length > 0
 }
 
-const addToCart = (productId) => {
-  if (productId) {
-    axios.post(`${backendUrl}/cart`, {
-      id: productId
-    }).then(response => {
-      if (response.status === 200 || response.status === 201) {
-        emit('cart', productId)
-        props.items.find(item => {
-          if (item.id === productId) {
-            item.inCart = true
-          }
-        })
-      }
-    })
-  }
+const addToCart = async (product) => {
+    await axios.post(`${backendUrl}/cart`, {
+      ...product
+    }).then(res => emit('cart', res.data))
+  props.items.find(item => {
+    if (item.product_id === product.product_id) {
+      item.inCart = true
+    }
+  })
 }
-
-const addToFavorite = () => {
-  alert('IN FAVORITE!')
-}
-
 </script>
 
 <template>
@@ -47,14 +34,13 @@ const addToFavorite = () => {
 
     <div class="products_list flex flex-wrap items-center justify-center gap-5 max-w-4/5 m-auto" v-if="hasProducts()">
       <Product v-for="item in items"
-               :id="item.id"
+               :product_id="item.product_id"
                :title="item.title"
                :price="item.price"
                :image="item.image"
                :liked="item.liked"
                :inCart="item.inCart"
                :addToCart="addToCart"
-               :addToFavorite="addToFavorite"
       />
     </div>
     <div v-else class="text-center ">
