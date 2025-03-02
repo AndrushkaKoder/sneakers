@@ -22,5 +22,8 @@ const closeCart = () => {
 .hidden {
   display: none;
 }
+button {
+  cursor: pointer;
+}
 
 </style>

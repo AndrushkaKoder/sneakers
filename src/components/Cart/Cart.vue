@@ -1,8 +1,9 @@
 <script setup>
 import {inject, ref, watchEffect} from "vue";
+import axios from "axios";
+
 import CartHeader from "@/components/Cart/CartHeader.vue";
 import CartItem from "@/components/Cart/CartItem.vue";
-import axios from "axios";
 import Promocode from "@/components/Cart/Promocode.vue";
 import OrderModal from "@/components/Order/OrderModal.vue";
 
@@ -15,7 +16,8 @@ const backendUrl = inject('backendUrl');
 const discount = ref(0)
 const emit = defineEmits(['delItem', 'promo'])
 const showCart = ref(false)
-const openModal = ref(false)
+const modal = ref(null)
+const totalSum = ref(props.sum)
 
 const deleteItem = (product) => {
   axios.delete(`${backendUrl}/cart/${product.id}`)
@@ -27,17 +29,37 @@ const deleteItem = (product) => {
   emit('delItem', product)
 }
 
-const handleSumWithPromo = (promocode) => {
-  return  discount.value = props.sum * (1 - Number(promocode.percent) / 100)
+const clearCart = async () => {
+   await axios.get(`${backendUrl}/cart`).then((res) => {
+    res.data.forEach(item => {
+      deleteItem(item)
+    })
+  })
 }
 
-const openModalHandler = () => {
-  openModal.value = true
+const handleSumWithPromo = (promocode) => {
+  if (promocode) {
+    totalSum.value = discount.value = props.sum * (1 - Number(promocode.percent) / 100)
+  }
+  return totalSum.value
+}
+
+const openOrderModal = () => {
+  modal.value.classList.toggle('hidden')
+}
+
+const handlerCreateOrder = (data) => {
+  if (data.success === true) {
+    clearCart()
+    modal.value.classList.add('hidden')
+  }
 }
 
 watchEffect(() => {
   showCart.value = Number(props.sum) > 0
+  totalSum.value = props.sum
 })
+
 </script>
 
 <template>
@@ -61,13 +83,13 @@ watchEffect(() => {
             <span id="hs-soft-color-success-label" class="font-bold">Поздравляем!</span> промокод применен!
           </div>
         </div>
-        <button @click="openModalHandler" data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="button"
+        <button @click="openOrderModal" data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="button"
                 class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
           Оформить заказ
         </button>
       </div>
 
-      <div class="cart_items px-5">
+      <div class="cart_items px-5" v-auto-animate>
         <CartItem v-for="item in items"
                   :id="item.id"
                   :product_id="item.product_id"
@@ -80,14 +102,33 @@ watchEffect(() => {
     </div>
   </div>
 
-  <OrderModal :items="items" :total="handleSumWithPromo" :showModal="openModal"/>
+  <div id="crud-modal" ref="modal" tabindex="-1" aria-hidden="true"
+       class="hidden modal_order overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="m-auto relative p-4 w-full max-w-md max-h-full">
+      <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+        <div
+            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Новый заказ на сумму {{ totalSum }} ₽
+          </h3>
+          <button @click="openOrderModal" type="button"
+                  class="close_modal_order text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-toggle="crud-modal">
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <OrderModal :items="items" :total="totalSum" @orderCreated="handlerCreateOrder"/>
+      </div>
+    </div>
+  </div>
+
 </template>
 
-<style scoped>
-body {
-  overflow: hidden;
-  height: 50vh;
-}
+<style>
 
 .cart {
   min-width: 450px;
@@ -101,6 +142,13 @@ body {
   border: 1px solid lightgrey;
   border-radius: 10px;
   overflow: auto;
+}
+
+.modal_order {
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
 }
 
 @media screen and (max-width: 768px) {

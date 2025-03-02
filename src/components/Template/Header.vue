@@ -19,12 +19,14 @@ const showFavorite = () => {
 <template>
   <header class="header flex justify-between items-center p-6">
     <div class="logo flex gap-3 items-center justify-center">
-      <div class="logo_image">
-        <img src="/logo.png" alt="logo" class="max-w-[60px]">
-      </div>
-      <div class="logo_text">
-        <h2 class="font-bold text-2xl">Sneakers box</h2>
-      </div>
+      <RouterLink to="/" class="flex items-center gap-3">
+        <div class="logo_image">
+          <img src="/logo.png" alt="logo" class="max-w-[60px]">
+        </div>
+        <div class="logo_text">
+          <h2 class="font-bold text-2xl">Sneakers box</h2>
+        </div>
+      </RouterLink>
     </div>
     <nav class="navigation">
       <ul class="flex justify-center items-center gap-3 nav_list">
@@ -35,16 +37,17 @@ const showFavorite = () => {
           </a>
         </li>
         <li class="nav_item">
-          <a href="#" class="flex justify-center items-center gap-2" @click="showFavorite">
+          <RouterLink to="favorites" class="flex items-center gap-3">
             <img src="/heart.svg" alt="likes">
             <span>Закладки</span>
-          </a>
+          </RouterLink>
+
         </li>
         <li class="nav_item">
-          <a href="#" class="flex justify-center items-center gap-2">
+          <RouterLink to="/profile" class="flex items-center gap-3">
             <img src="/profile.svg" alt="profile">
             <span>Профиль</span>
-          </a>
+          </RouterLink>
         </li>
       </ul>
     </nav>
@@ -53,8 +56,5 @@ const showFavorite = () => {
 </template>
 
 <style scoped>
-.hidden {
-  display: none;
-}
 
 </style>

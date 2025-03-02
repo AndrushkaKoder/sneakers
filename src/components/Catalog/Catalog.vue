@@ -32,7 +32,7 @@ const addToCart = async (product) => {
       <h1 class="font-bold text-2xl">{{ catalogTitle }}</h1>
     </div>
 
-    <div class="products_list flex flex-wrap items-center justify-center gap-5 max-w-4/5 m-auto" v-if="hasProducts()">
+    <div class="products_list flex flex-wrap items-center justify-center gap-5 max-w-4/5 m-auto" v-if="hasProducts" v-auto-animate>
       <Product v-for="item in items"
                :product_id="item.product_id"
                :title="item.title"

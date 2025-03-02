@@ -37,5 +37,7 @@ const sendPromo = async (event) => {
 </template>
 
 <style scoped>
-
+input {
+  cursor: pointer;
+}
 </style>

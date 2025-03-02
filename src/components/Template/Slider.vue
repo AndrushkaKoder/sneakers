@@ -6,26 +6,13 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import {reactive} from "vue";
-
-register()
 
 const modules = [Autoplay, Navigation, Pagination]
+register()
 
-const data = reactive([
-  {
-    image: '1.jpg'
-  },
-  {
-    image: '3.jpg'
-  },
-  {
-    image: '4.jpg'
-  },
-  {
-    image: '5.webp'
-  },
-])
+defineProps({
+  items: Array
+})
 </script>
 
 <template>
@@ -34,14 +21,14 @@ const data = reactive([
       <swiper
           :space-between="50"
           :slides-per-view="1"
-          class="rounded-2xl" :loop="true"
+          class="rounded-2xl" :loop="false"
           :modules="modules"
           :autoplay="{ delay: 4000, disableOnInteraction: false }"
           :speed="1000"
       >
-        <swiper-slide v-for="slide in data" class="rounded-2xl">
+        <swiper-slide v-for="item in items" class="rounded-2xl">
           <div class="slide_content rounded-2xl"
-               :style="{ backgroundImage: `url('/public/slider/${slide.image}')` }">
+               :style="{ backgroundImage: `url('${item.src}')` }">
           </div>
         </swiper-slide>
       </swiper>
@@ -50,7 +37,6 @@ const data = reactive([
 </template>
 
 <style scoped>
-
 .slide_content {
   min-width: 100%;
   min-height: 450px;
@@ -59,5 +45,4 @@ const data = reactive([
   background-repeat: no-repeat;
   cursor: grab;
 }
-
 </style>
